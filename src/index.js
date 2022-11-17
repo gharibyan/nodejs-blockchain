@@ -85,9 +85,9 @@ async function run () {
 
 run()
   .then(() => {
-    process.exit(1)
+    process.exit(0)
   })
   .catch(error => {
-    console.error(error)
+    console.error('Server crashed with error', error)
     process.exit(1)
   })
