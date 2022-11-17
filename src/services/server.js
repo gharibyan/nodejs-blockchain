@@ -2,6 +2,7 @@ const { PeerRPCServer } = require('grenache-nodejs-http')
 const Link = require('grenache-nodejs-link')
 const { orderBy } = require('lodash')
 const generateInstanceName = require('../utils/generate-instance-name')
+const { LINK_HOST_URL } = require('../constants')
 
 const sleep = (ms) => {
   return new Promise(resolve => {
@@ -12,9 +13,7 @@ const sleep = (ms) => {
 }
 
 const setupService = (props) => {
-  const link = new Link({
-    grape: 'http://127.0.0.1:30001'
-  })
+  const link = new Link({ grape: LINK_HOST_URL })
   link.start()
   const peer = new PeerRPCServer(link, { timeout: 300000 })
   peer.init()

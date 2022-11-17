@@ -1,14 +1,11 @@
 const { PeerRPCClient } = require('grenache-nodejs-http')
 const Link = require('grenache-nodejs-link')
 const generateInstanceName = require('../utils/generate-instance-name')
+const { PEER_DEFAULT_CONFIGS, LINK_HOST_URL } = require('../constants')
 
-const PEER_DEFAULT_CONFIGS = {
-  timeout: 10000,
-  retry: 20
-}
 class Client {
   constructor (props) {
-    const link = new Link({ grape: 'http://127.0.0.1:30001' })
+    const link = new Link({ grape: LINK_HOST_URL })
     link.start()
     const peer = new PeerRPCClient(link, {})
     peer.init()
