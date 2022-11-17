@@ -1,6 +1,6 @@
 const { PeerRPCServer } = require('grenache-nodejs-http')
 const Link = require('grenache-nodejs-link')
-const { orderBy } = require('lodash')
+const { sortBy, last } = require('lodash')
 const generateInstanceName = require('../utils/generate-instance-name')
 
 const sleep = (ms) => {
@@ -12,9 +12,7 @@ const sleep = (ms) => {
 }
 
 const setupService = (props) => {
-  const link = new Link({
-    grape: 'http://127.0.0.1:30001'
-  })
+  const link = new Link({ grape: 'http://127.0.0.1:30001' })
   link.start()
   const peer = new PeerRPCServer(link, { timeout: 300000 })
   peer.init()
@@ -22,7 +20,10 @@ const setupService = (props) => {
   const service = peer.transport('server')
   service.listen(port)
   link.announce(props.instanceName, service.port, {})
-  return service
+  return {
+    link,
+    service
+  }
 }
 
 class Server {
@@ -37,22 +38,25 @@ class Server {
   }
 
   upgradeOrderBook () {
-    for (const [i, val] of this.bids.entries()) {
-      const findMatch = this.asks.findIndex(a => a.amount === val.amount && a.qty === val.qty)
+    const bids = [...this.bids]
+    const asks = [...this.asks]
+
+    for (const [i, val] of bids.entries()) {
+      const findMatch = asks.findIndex(a => a.price === val.price && a.qty === val.qty)
       if (findMatch > -1) {
-        this.bids.splice(i, 1)
-        this.asks.splice(i, 1)
+        bids.splice(i, 1)
+        asks.splice(findMatch, 1)
       }
     }
     this.orderBook.push({
       ts: Date.now(),
-      data: { bid: this.bids, ask: this.asks }
+      data: { bid: bids, ask: asks }
     })
   }
 
   handleRequest (payload) {
-    const { type, qty, price, sender } = payload
-    const data = { qty, price, sender }
+    const { type, qty, price, sender, ts } = payload
+    const data = { qty, price, sender, ts }
     let response = null
     switch (type) {
       case 'bid':
@@ -63,9 +67,12 @@ class Server {
         this.asks.unshift(data)
         this.upgradeOrderBook()
         break
-      case 'orderBook':
-        const sorted = orderBy(this.orderBook, ['ts', 'desc'])
-        response = sorted[0]
+      case 'latestOrderBook':
+        const sorted = sortBy(this.orderBook, 'ts')
+        response = last(sorted)
+        break
+      case 'orderBooks':
+        response = this.orderBook
         break
       default:
         console.warn(`Invalid type`)
@@ -75,7 +82,7 @@ class Server {
 
   async init (timeout) {
     await sleep(timeout || 1000)
-    this.service.on('request', (rid, key, payload, handler) => {
+    this.service.service.on('request', (rid, key, payload, handler) => {
       const response = this.handleRequest({ ...payload })
       handler.reply(null, { msg: 'ok', data: response })
     })

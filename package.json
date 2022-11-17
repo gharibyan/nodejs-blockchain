@@ -3,19 +3,21 @@
   "private": true,
   "version": "1.0.0",
   "keywords": [],
-  "scripts": {},
+  "scripts": {
+    "start": "node src/index.js",
+    "lint": "standard"
+  },
   "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/gharibyan/nodejs-blockchain"
   },
-  "author": "x40",
-  "license": "",
+  "author": "gharibyan",
+  "license": "N/A",
   "dependencies": {
     "grenache-grape": "^0.9.11",
     "grenache-nodejs-http": "^0.7.12",
     "grenache-nodejs-link": "^0.7.12",
-    "grenache-nodejs-ws": "^0.7.10",
     "lodash": "^4.17.21",
     "uuid": "^9.0.0"
   },
