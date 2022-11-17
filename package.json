@@ -1,0 +1,25 @@
+{
+  "name": "nodejs-blockchain",
+  "private": true,
+  "version": "1.0.0",
+  "keywords": [],
+  "scripts": {},
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "x40",
+  "license": "",
+  "dependencies": {
+    "grenache-grape": "^0.9.11",
+    "grenache-nodejs-http": "^0.7.12",
+    "grenache-nodejs-link": "^0.7.12",
+    "grenache-nodejs-ws": "^0.7.10",
+    "lodash": "^4.17.21",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "standard": "^11.0.0"
+  }
+}
