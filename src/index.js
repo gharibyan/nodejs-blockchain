@@ -80,7 +80,7 @@ async function run () {
 }
 
 run()
-  .then((r) => {
+  .then(() => {
     process.exit(1)
   })
   .catch(error => {
