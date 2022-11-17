@@ -29,8 +29,8 @@ const setupService = (props) => {
 
 class Server {
   constructor (props) {
-    this.bids = []
-    this.asks = []
+    this.bids = new Set()
+    this.asks = new Set()
     this.orderBook = []
     this.instanceName = generateInstanceName(props)
     this.service = setupService({
@@ -42,16 +42,11 @@ class Server {
     const bids = [...this.bids]
     const asks = [...this.asks]
 
-    for (const [i, val] of bids.entries()) {
-      const findMatch = asks.findIndex(a => a.price === val.price && a.qty === val.qty)
-      if (findMatch > -1) {
-        bids.splice(i, 1)
-        asks.splice(findMatch, 1)
-      }
-    }
+    const filteredBids = bids.filter(b => !asks.find((a) => a.price === b.price && a.qty === b.qty))
+    const filteredAsks = asks.filter(b => !bids.find((a) => a.price === b.price && a.qty === b.qty))
     this.orderBook.push({
       ts: Date.now(),
-      data: { bid: bids, ask: asks }
+      data: { bid: filteredBids, ask: filteredAsks }
     })
   }
 
@@ -61,11 +56,11 @@ class Server {
     let response = null
     switch (type) {
       case 'bid':
-        this.bids.unshift(data)
+        this.bids.add(data)
         this.upgradeOrderBook()
         break
       case 'ask':
-        this.asks.unshift(data)
+        this.asks.add(data)
         this.upgradeOrderBook()
         break
       case 'latestOrderBook':

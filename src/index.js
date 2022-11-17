@@ -50,17 +50,17 @@ async function run () {
 
   await Promise.all([
     clients['bob'].bid(bids[0]),
-    clients['john'].bid(bids[1]),
-    clients['alice'].bid(bids[2]),
-    clients['chris'].bid(bids[3]),
-    clients['deborah'].bid(bids[4]),
     clients['daniel'].bid(bids[5]),
-    clients['jamie'].ask(asks[0]),
+    clients['john'].bid(bids[1]),
     clients['anna'].ask(asks[1]),
+    clients['alice'].bid(bids[2]),
+    clients['daniel'].ask(asks[4]),
+    clients['chris'].bid(bids[3]),
+    clients['jamie'].ask(asks[0]),
     clients['clara'].ask(asks[2]),
     clients['bill'].ask(asks[3]),
-    clients['daniel'].ask(asks[4]),
-    clients['bill'].ask(asks[5])
+    clients['bill'].ask(asks[5]),
+    clients['deborah'].bid(bids[4])
   ])
 
   const allOrderBooks = await Promise.all(
