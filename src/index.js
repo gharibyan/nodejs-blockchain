@@ -14,7 +14,8 @@ async function run () {
     { qty: 100, price: 800 },
     { qty: 75, price: 805 },
     { qty: 150, price: 810 },
-    { qty: 30, price: 830 }
+    { qty: 30, price: 830 },
+    { qty: 20, price: 200 }
   ]
 
   const asks = [
@@ -22,7 +23,8 @@ async function run () {
     { qty: 100, price: 835 },
     { qty: 25, price: 840 },
     { qty: 75, price: 845 },
-    { qty: 50, price: 820 }
+    { qty: 50, price: 820 },
+    { qty: 20, price: 200 }
   ]
 
   const participants = (
@@ -52,11 +54,13 @@ async function run () {
     clients['alice'].bid(bids[2]),
     clients['chris'].bid(bids[3]),
     clients['deborah'].bid(bids[4]),
+    clients['daniel'].ask(bids[5]),
     clients['jamie'].ask(asks[0]),
     clients['anna'].ask(asks[1]),
     clients['clara'].ask(asks[2]),
     clients['bill'].ask(asks[3]),
-    clients['daniel'].ask(asks[4])
+    clients['daniel'].ask(asks[4]),
+    clients['bill'].ask(asks[5])
   ])
 
   const allOrderBooks = await Promise.all(
