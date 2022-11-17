@@ -54,7 +54,7 @@ async function run () {
     clients['alice'].bid(bids[2]),
     clients['chris'].bid(bids[3]),
     clients['deborah'].bid(bids[4]),
-    clients['daniel'].ask(bids[5]),
+    clients['daniel'].bid(bids[5]),
     clients['jamie'].ask(asks[0]),
     clients['anna'].ask(asks[1]),
     clients['clara'].ask(asks[2]),
